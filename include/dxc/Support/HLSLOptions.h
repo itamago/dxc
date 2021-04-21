@@ -172,6 +172,9 @@ public:
   bool RecompileFromBinary = false; // OPT _Recompile (Recompiling the DXBC binary file not .hlsl file)
   bool StripDebug = false; // OPT Qstrip_debug
   bool EmbedDebug = false; // OPT Qembed_debug
+  bool SourceInDebugModule = false; // OPT Zs
+  bool SourceOnlyDebug = false; // OPT Qsource_only_debug
+  bool PdbInPrivate = false; // OPT Qpdb_in_private
   bool StripRootSignature = false; // OPT_Qstrip_rootsignature
   bool StripPrivate = false; // OPT_Qstrip_priv
   bool StripReflection = false; // OPT_Qstrip_reflect
@@ -189,12 +192,16 @@ public:
   bool ResMayAlias = false; // OPT_res_may_alias
   unsigned long ValVerMajor = UINT_MAX, ValVerMinor = UINT_MAX; // OPT_validator_version
   unsigned ScanLimit = 0; // OPT_memdep_block_scan_limit
+  bool ForceZeroStoreLifetimes = false; // OPT_force_zero_store_lifetimes
+  bool EnableLifetimeMarkers = false; // OPT_enable_lifetime_markers
 
   // Optimization pass enables, disables and selects
   std::map<std::string, bool> DxcOptimizationToggles; // OPT_opt_enable & OPT_opt_disable
   std::map<std::string, std::string> DxcOptimizationSelects; // OPT_opt_select
 
   bool PrintAfterAll; // OPT_print_after_all
+  bool EnablePayloadQualifiers = false; // OPT_enable_payload_qualifiers
+  bool HandleExceptions = false; // OPT_disable_exception_handling
 
   // Rewriter Options
   RewriterOpts RWOpt;
@@ -205,7 +212,8 @@ public:
   bool IsLibraryProfile();
 
   // Helpers to clarify interpretation of flags for behavior in implementation
-  bool IsDebugInfoEnabled();    // Zi
+  bool GenerateFullDebugInfo(); // Zi
+  bool GeneratePDB();           // Zi or Zs
   bool EmbedDebugInfo();        // Qembed_debug
   bool EmbedPDBName();          // Zi or Fd
   bool DebugFileIsDirectory();  // Fd ends in '\\'
