@@ -361,7 +361,23 @@ typedef unsigned char *LPBYTE;
 typedef BYTE BOOLEAN;
 typedef BOOLEAN *PBOOLEAN;
 
-typedef bool BOOL;
+#ifndef _WINDEF_
+    // if these aren't defined already by Windows headers, define now
+
+    #if defined(__APPLE__)
+        typedef signed char BOOL;
+        // BOOL is explicitly signed so @encode(BOOL) == "c" rather than "C"
+        // even if -funsigned-char is used.
+    #else
+        typedef int BOOL;
+    #endif
+
+    #define FALSE   0
+    #define TRUE    1
+
+#endif  // _WINDEF_
+
+//typedef bool BOOL;
 typedef BOOL *LPBOOL;
 
 typedef int INT;
@@ -373,7 +389,7 @@ typedef long long LONG_PTR;
 typedef unsigned long long ULONGLONG;
 
 typedef uint16_t WORD;
-typedef uint32_t DWORD;
+//typedef uint32_t DWORD;
 typedef DWORD *LPDWORD;
 
 typedef uint32_t UINT32;
@@ -388,7 +404,7 @@ typedef const char *PCSTR;
 
 typedef int errno_t;
 
-typedef wchar_t WCHAR;
+//typedef wchar_t WCHAR;
 typedef wchar_t *LPWSTR;
 typedef wchar_t *PWCHAR;
 typedef const wchar_t *LPCWSTR;
